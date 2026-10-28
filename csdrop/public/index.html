@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="uz"><head><meta charset="utf-8"><title>CS DROP</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,Segoe UI,Arial,sans-serif;color:#e8ecf8;background:#0b0e17;min-height:100vh}
+.bg{background:radial-gradient(900px 500px at 20% 10%,#5b2bd6aa,transparent),radial-gradient(900px 600px at 85% 90%,#2563ebaa,transparent),linear-gradient(135deg,#1a1233,#0b1230)}
+.logo{font-weight:900;font-size:34px;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.auth{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.auth .tag{color:#aeb6d6;margin:6px 0 26px}
+.cardA{background:#202638;border-radius:22px;padding:34px 40px;width:min(560px,100%);box-shadow:0 20px 60px #0008}
+.cardA h1{text-align:center;margin:0 0 6px;font-size:28px}.cardA .sub{text-align:center;color:#b4bcd8;margin-bottom:24px}
+label{display:block;font-weight:700;margin:14px 0 8px;font-size:14px}
+.f{position:relative}.f input{width:100%;background:#161b2b;border:1px solid #38405c;border-radius:12px;padding:16px 44px;color:#fff;font:inherit}
+.f input:focus{outline:2px solid #7c3aed}.f .l{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.7}
+.f .e{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:.7;user-select:none}
+.main{width:100%;margin-top:22px;padding:16px;border:0;border-radius:12px;font-weight:800;font-size:16px;color:#fff;cursor:pointer;background:linear-gradient(90deg,#9333ea,#2563eb)}
+.sw{text-align:center;margin-top:20px;color:#b4bcd8}.sw a{color:#c084fc;font-weight:700;cursor:pointer}
+.err{color:#ff7b8a;text-align:center;margin-top:12px;min-height:18px}
+header{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid #252c44;flex-wrap:wrap;position:sticky;top:0;background:#0b0e17ee;z-index:5}
+.sp{flex:1}.pill{background:#151a2a;border:1px solid #252c44;padding:7px 14px;border-radius:999px;font-weight:700}
+button.b{background:linear-gradient(90deg,#9333ea,#2563eb);color:#fff;border:0;border-radius:10px;padding:9px 16px;font-weight:800;cursor:pointer}
+button.g{background:#151a2a;color:#e8ecf8;border:1px solid #252c44;border-radius:10px;padding:9px 16px;font-weight:700;cursor:pointer}button:disabled{opacity:.4}
+.av{width:36px;height:36px;border-radius:50%;background:#2d3550 center/cover;display:inline-block;vertical-align:middle}
+main{max-width:1100px;margin:auto;padding:18px}h2{margin:24px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.card{background:#151a2a;border:1px solid #252c44;border-radius:14px;padding:14px;text-align:center}.card svg{width:100%;height:96px}.card b{display:block;margin:6px 0 2px}.mu{color:#8a93b2;font-size:13px}
+.r0{color:#9aa5c4}.r1{color:#4b9bff}.r2{color:#b45bff}.r3{color:#ff4b6b}.r4{color:#ffc933}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20;padding:16px}.modal.s{display:flex}
+.box{background:#151a2a;border:1px solid #252c44;border-radius:16px;padding:20px;width:min(560px,100%);max-height:88vh;overflow:auto}
+input.i,textarea,select{background:#0b0e17;color:#e8ecf8;border:1px solid #252c44;border-radius:10px;padding:10px;width:100%;margin:6px 0;font:inherit}
+.pl{padding:10px;border:1px solid #252c44;border-radius:10px;margin:6px 0;cursor:pointer;display:flex;gap:10px;align-items:center}.pl.on{border-color:#a855f7;background:#1d2338}
+.msg{background:#101528;border-left:3px solid #a855f7;padding:8px 12px;margin:6px 0;border-radius:6px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.big{width:110px;height:110px;border-radius:50%;background:#2d3550 center/cover;margin:auto}
+.hide{display:none}
+</style></head><body>
+<div id="app"></div><div class="modal" id="m"><div class="box" id="mb"></div></div>
+<script>
+const $=id=>document.getElementById(id);let CAT,U=null,ADM=false,mode='login',tab='shop',sel=null,users=[];
+const RC=['r0','r1','r2','r3','r4'],RN=['Oddiy','Kam uchraydi','Noyob','Afsonaviy','Oltin'];
+const ic={gun:c=>`<svg viewBox="0 0 160 100"><rect x="10" y="38" width="105" height="16" rx="4" fill="${c}"/><rect x="108" y="42" width="45" height="8" fill="#555"/><rect x="40" y="52" width="22" height="34" rx="4" fill="#333" transform="rotate(12 50 60)"/><rect x="62" y="28" width="40" height="10" rx="3" fill="#222"/><rect x="14" y="44" width="90" height="3" fill="#fff6"/></svg>`,
+knife:c=>`<svg viewBox="0 0 160 100"><path d="M20 80 L110 15 Q135 10 140 22 L60 85 Z" fill="${c}"/><path d="M30 78 L110 20" stroke="#fff8" stroke-width="3"/><rect x="8" y="72" width="34" height="14" rx="5" fill="#222" transform="rotate(-35 25 79)"/></svg>`,
+coin:c=>`<svg viewBox="0 0 160 100"><circle cx="80" cy="50" r="38" fill="${c}"/><circle cx="80" cy="50" r="28" fill="none" stroke="#fff9" stroke-width="4"/><text x="80" y="60" font-size="30" font-weight="900" text-anchor="middle" fill="#7a4a00">C</text></svg>`,
+box:c=>`<svg viewBox="0 0 160 100"><rect x="30" y="30" width="100" height="58" rx="6" fill="${c}"/><rect x="30" y="30" width="100" height="16" fill="#0004"/><rect x="72" y="30" width="16" height="58" fill="#ffd34d"/><rect x="66" y="48" width="28" height="18" rx="3" fill="#222"/></svg>`};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(p,b){const r=await fetch('/api/'+p,b===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(!r.ok)throw j.error||'Xato';return j}
+const IM=()=>Object.fromEntries(CAT.items.map(i=>[i.id,i]));
+const card=(i,x='')=>`<div class="card">${ic[i.t](i.c)}<b>${i.n}</b><div class="mu ${RC[i.r]}">${i.g} · ${RN[i.r]}</div>${x}</div>`;
+const avs=u=>u&&u.avatar?`style="background-image:url(${u.avatar})"`:'';
+function modal(h){$('mb').innerHTML=h;$('m').classList.add('s')}function closeM(){$('m').classList.remove('s')}$('m').onclick=e=>{if(e.target.id=='m')closeM()};
+/* ---------- AUTH ---------- */
+function authView(adminMode){
+ const su=mode=='signup';
+ $('app').innerHTML=`<div class="auth bg"><div class="logo">🎁 CS DROP</div><div class="tag">Keys oching, skin yig'ing, coin to'plang</div>
+ <div class="cardA"><h1>${adminMode?'Admin kirish':su?'Hisob yaratish':'Welcome Back'}</h1><div class="sub">${adminMode?'Admin login va parol':su?'CS DROP da yangi profil oching':'CS DROP hisobingizga kiring'}</div>
+ ${su&&!adminMode?`<label>Ism</label><div class="f"><span class="l">👤</span><input id="nm" placeholder="Ismingiz"></div>`:''}
+ <label>${adminMode?'Login':'Email Address'}</label><div class="f"><span class="l">${adminMode?'🛡':'✉'}</span><input id="em" placeholder="${adminMode?'Login':'Enter your email'}" ${adminMode?'':'type="email"'}></div>
+ <label>${adminMode?'Parol':'Password'}</label><div class="f"><span class="l">🔒</span><input id="pw" type="password" placeholder="Enter your password"><span class="e" onclick="pw.type=pw.type=='password'?'text':'password'">👁</span></div>
+ <button class="main" onclick="submitAuth(${!!adminMode})">${adminMode?'Kirish':su?'Sign Up':'Sign In'}</button><div class="err" id="er"></div>
+ ${adminMode?`<div class="sw"><a onclick="mode='login';authView()">← Oddiy kirish</a></div>`:`<div class="sw">${su?'Already have an account? <a onclick="mode=\'login\';authView()">Sign in</a>':'Don\'t have an account? <a onclick="mode=\'signup\';authView()">Sign up</a>'}</div><div class="sw"><a style="font-size:13px;opacity:.7" onclick="authView(true)">⚙ Admin</a></div>`}
+ </div></div>`;
+ document.querySelectorAll('.f input').forEach(i=>i.onkeydown=e=>{if(e.key=='Enter')submitAuth(!!adminMode)});
+}
+async function submitAuth(a){try{
+ if(a)await api('admin-login',{login:em.value,password:pw.value});
+ else await api(mode=='signup'?'signup':'login',{name:window.nm&&nm.value,email:em.value,password:pw.value});
+ boot()}catch(e){$('er').textContent=e}}
+async function logout(){await api('logout',{});U=null;ADM=false;authView()}
+/* ---------- APP ---------- */
+function shell(inner){
+ $('app').innerHTML=`<header><div class="logo" style="font-size:26px">🎁 CS DROP</div><div class="sp"></div>
+ ${ADM?'<span class="pill">⚙ ADMIN</span>':`<span class="pill">🪙 ${U.coins}</span><button class="g" onclick="tab='shop';draw()">Do'kon</button><button class="g" onclick="tab='msgs';draw()">✉ ${U.msgs.length}</button><span class="pill" style="cursor:pointer" onclick="tab='profile';draw()"><span class="av" ${avs(U)}></span> ${esc(U.name)}</span>`}
+ <button class="g" onclick="logout()">Chiqish</button></header><main>${inner}</main>`}
+function draw(){if(ADM)return adminView();({shop:shopView,profile:profileView,msgs:msgsView})[tab]()}
+function shopView(){const m=IM();
+ shell(`<h2>🎁 Keyslar</h2><div class="grid">${CAT.cases.map(k=>`<div class="card">${ic.box(k.c)}<b>${k.n}</b><div class="mu">${k.g} · ${k.it.length} predmet</div><br><button class="b" onclick="openCase('${k.id}')">🪙 ${k.p} — Ochish</button></div>`).join('')}</div>
+ <h2>🔫 Skinlar</h2><div class="grid">${CAT.items.filter(i=>i.t!='coin').map(i=>card(i)).join('')}</div>
+ <h2>🪙 Coinlar</h2><div class="grid">${CAT.items.filter(i=>i.t=='coin').map(i=>card(i)).join('')}</div>
+ <h2>🎒 Inventar</h2><div class="grid">${U.inv.length?U.inv.map(r=>card(m[r.item],`<button class="g" onclick="sell(${r.id})">Sotish (+${CAT.sell[m[r.item].r]})</button>`)).join(''):'<span class="mu">Hozircha bo\'sh. Keys oching!</span>'}</div>`)}
+async function openCase(id){const k=CAT.cases.find(c=>c.id==id),m=IM();
+ if(U.coins<k.p)return modal(`<h2>Coin yetmaydi</h2><p class="mu">Kerak: ${k.p}. Coin olish uchun admin bilan bog'laning.</p><button class="b" onclick="closeM()">Yopish</button>`);
+ modal(`<h2>${k.n} ochilmoqda…</h2><div id="sp"></div>`);let n=0;const t=setInterval(()=>{$('sp').innerHTML=card(m[k.it[n++%k.it.length]])},90);
+ try{const [r]=await Promise.all([api('open',{caseId:id}),new Promise(r=>setTimeout(r,1800))]);clearInterval(t);U=r.user;
+  modal(`<h2>🎉 Sizga tushdi!</h2>${card(m[r.won])}<br><button class="b" onclick="closeM();draw()">Zo'r!</button>`);draw()}catch(e){clearInterval(t);modal(`<h2>Xato</h2><p>${esc(e)}</p><button class="b" onclick="closeM()">Yopish</button>`)}}
+async function sell(id){U=await api('sell',{invId:id});draw()}
+function profileView(){shell(`<h2>👤 Mening profilim</h2><div class="box" style="margin:auto"><div class="big" id="pv" ${avs(U)}></div>
+ <div style="text-align:center;margin:10px"><label class="g" style="display:inline-block;padding:8px 14px;border-radius:10px;cursor:pointer">📷 Rasm tanlash<input type="file" accept="image/*" id="pf" class="hide" onchange="pickImg(this)"></label></div>
+ <label>Ism</label><input class="i" id="pn" maxlength="30" value="${esc(U.name)}"><label>Email</label><input class="i" value="${esc(U.email)}" disabled>
+ <label>Bio (o'zingiz haqingizda)</label><textarea id="pb" rows="4" maxlength="300">${esc(U.bio)}</textarea>
+ <button class="main" onclick="saveProfile()">Saqlash</button><div class="err" id="er"></div></div>`)}
+let newAv=null;
+function pickImg(inp){const f=inp.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=Math.min(1,256/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);newAv=c.toDataURL('image/jpeg',.85);$('pv').style.backgroundImage=`url(${newAv})`};im.src=URL.createObjectURL(f)}
+async function saveProfile(){try{U=await api('profile',{name:pn.value,bio:pb.value,avatar:newAv??U.avatar});newAv=null;$('er').style.color='#6ee7a0';$('er').textContent='Saqlandi ✓'}catch(e){$('er').textContent=e}}
+function msgsView(){shell(`<h2>✉ Xabarlar</h2>${U.msgs.length?U.msgs.map(m=>`<div class="msg">${esc(m.text)}<div class="mu">${new Date(m.created).toLocaleString()}</div></div>`).join(''):'<p class="mu">Xabar yo\'q</p>'}`)}
+/* ---------- ADMIN ---------- */
+async function adminView(){users=await api('admin/users');const u=users.find(x=>x.id==sel);
+ shell(`<h2>⚙ Admin panel — barcha profillar (${users.length})</h2>${users.map(x=>`<div class="pl ${x.id==sel?'on':''}" onclick="sel=${x.id};adminView()"><span class="av" ${avs(x)}></span><div style="flex:1"><b>${esc(x.name)}</b> <span class="mu">${esc(x.email)}</span><div class="mu">${esc(x.bio||'')}</div></div><b>🪙 ${x.coins} · 🎒 ${x.items}</b></div>`).join('')||'<p class="mu">Hali hech kim ro\'yxatdan o\'tmagan</p>'}
+ <div class="box" style="margin-top:14px"><b>${u?'Tanlangan: '+esc(u.name):'Profilni tanlang'}</b>
+ <input class="i" id="amt" type="number" min="1" placeholder="Coin miqdori"><div class="row"><button class="b" ${u?'':'disabled'} onclick="adj(1)">+ Coin qo'shish</button><button class="g" ${u?'':'disabled'} onclick="adj(-1)">− Coin ayirish</button></div>
+ <textarea id="mt" rows="3" placeholder="Xabar matni"></textarea><button class="b" ${u?'':'disabled'} onclick="sendM()">✉ Xabar yuborish</button></div>`)}
+async function adj(s){const a=parseInt(amt.value);if(!a)return;await api('admin/coins',{userId:sel,amount:a*s});adminView()}
+async function sendM(){if(!mt.value.trim())return;await api('admin/message',{userId:sel,text:mt.value});mt.value='';alert('Yuborildi')}
+async function boot(){CAT=await api('catalog');const r=await api('me');if(r.admin){ADM=true;adminView()}else if(r.user){U=r.user;ADM=false;draw()}else authView()}
+boot();
+</script></body></html>
